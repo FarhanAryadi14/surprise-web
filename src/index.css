@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply bg-pastel-cream text-romantic-dark font-display overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/60 shadow-xl rounded-3xl;
+  }
+  
+  .glass-button {
+    @apply bg-white/80 backdrop-blur-sm border border-white hover:bg-white transition-all shadow-md active:scale-95;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 15px rgba(255, 141, 161, 0.6);
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 15px rgba(252, 225, 129, 0.7);
+  }
+
+  /* Pattern latar belakang untuk surat cinta */
+  .heart-pattern {
+    background-color: #FFF9F5;
+    background-image: radial-gradient(#FFB3C6 1.5px, transparent 1.5px), radial-gradient(#FFB3C6 1.5px, #FFF9F5 1.5px);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+  }
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFE5EC;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFB3C6;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF8DA1;
+}
