@@ -27,6 +27,7 @@ export const FallingHearts: React.FC = () => {
             fontSize: `${heart.size}px`,
             opacity: heart.opacity,
             animation: `fallingHeart ${heart.duration}s linear ${heart.delay}s infinite`,
+            willChange: 'transform, opacity',
           }}
         >
           {heart.symbol}
@@ -36,7 +37,7 @@ export const FallingHearts: React.FC = () => {
       <style>{`
         @keyframes fallingHeart {
           0% {
-            transform: translateY(-20px) rotate(0deg) scale(0.8);
+            transform: translate3d(0, -20px, 0) rotate(0deg) scale(0.8);
             opacity: 0;
           }
           10% {
@@ -46,7 +47,7 @@ export const FallingHearts: React.FC = () => {
             opacity: 0.6;
           }
           100% {
-            transform: translateY(105vh) rotate(360deg) scale(1);
+            transform: translate3d(0, 105vh, 0) rotate(360deg) scale(1);
             opacity: 0;
           }
         }

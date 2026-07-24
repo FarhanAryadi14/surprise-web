@@ -10,6 +10,7 @@ import { InteractiveCake } from './components/InteractiveCake';
 import { TimelineSection } from './components/TimelineSection';
 import { GallerySection } from './components/GallerySection';
 import { LoveLetterSection } from './components/LoveLetterSection';
+import { ScratchCardSection } from './components/ScratchCardSection';
 import { ClosingSection } from './components/ClosingSection';
 import { FallingHearts } from './components/ui/FallingHearts';
 import { Lightbox } from './components/ui/Lightbox';
@@ -158,6 +159,16 @@ export const App: React.FC = () => {
           salutation={content.loveLetterSection.salutation}
           paragraphs={content.loveLetterSection.paragraphs}
           signature={content.loveLetterSection.signature}
+        />
+
+        {/* Scratch Card Section */}
+        <ScratchCardSection
+          title={content.scratchCardSection.title}
+          subtitle={content.scratchCardSection.subtitle}
+          scratchInstruction={content.scratchCardSection.scratchInstruction}
+          revealedTitle={content.scratchCardSection.revealedTitle}
+          revealedMessage={content.scratchCardSection.revealedMessage}
+          actionText={content.scratchCardSection.actionText}
         />
 
         {/* Closing Section */}

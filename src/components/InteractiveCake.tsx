@@ -25,6 +25,7 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
   const [isCandleLit, setIsCandleLit] = useState<boolean>(true);
   const [isMicActive, setIsMicActive] = useState<boolean>(false);
   const [micStatusText, setMicStatusText] = useState<string>('');
+  const [micVolume, setMicVolume] = useState<number>(0);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -42,6 +43,7 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
   const resetCandle = () => {
     setIsCandleLit(true);
     setMicStatusText('');
+    setMicVolume(0);
   };
 
   // Menghentikan pendeteksian mikrofon
@@ -56,6 +58,7 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
       audioContextRef.current = null;
     }
     setIsMicActive(false);
+    setMicVolume(0);
   };
 
   // Mengaktifkan mikrofon (Web Audio API)
@@ -83,7 +86,10 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
       source.connect(analyser);
 
       setIsMicActive(true);
-      setMicStatusText(micInstruction);
+      setMicStatusText(micInstruction || '🎙️ Mikrofon aktif! Tiup langsung ke mikrofon HP/laptopmu...');
+
+      // Cooldown 1 detik agar suara klik/pop saat mengaktifkan mic tidak memicu tiupan secara prematur
+      const micStartTime = Date.now();
 
       // Loop deteksi volume nafas / tiupan
       const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -91,20 +97,27 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
         if (!analyserRef.current || !isCandleLit) return;
         analyserRef.current.getByteFrequencyData(dataArray);
 
-        // Hitung rata-rata frekuensi rendah (suara tiupan nafas)
-        let sum = 0;
-        const count = Math.min(30, dataArray.length);
-        for (let i = 0; i < count; i++) {
-          sum += dataArray[i];
-        }
-        const average = sum / count;
+        // Hanya periksa suara tiupan setelah 1 detik mikrofon siap
+        if (Date.now() - micStartTime > 1000) {
+          // Hitung rata-rata frekuensi rendah (karakteristik suara tiupan nafas)
+          let sum = 0;
+          const count = Math.min(25, dataArray.length);
+          for (let i = 0; i < count; i++) {
+            sum += dataArray[i];
+          }
+          const average = sum / count;
 
-        // Jika volume tiupan melebihi batas (threshold)
-        if (average > 48) {
-          blowOutCandle();
-        } else {
-          animationFrameRef.current = requestAnimationFrame(detectBlow);
+          // Visual indicator (0 - 100)
+          setMicVolume(Math.min(100, Math.round((average / 80) * 100)));
+
+          // Jika volume tiupan lebih dari threshold 80
+          if (average > 80) {
+            blowOutCandle();
+            return;
+          }
         }
+
+        animationFrameRef.current = requestAnimationFrame(detectBlow);
       };
 
       detectBlow();
@@ -263,13 +276,25 @@ export const InteractiveCake: React.FC<InteractiveCakeProps> = ({
 
             {/* Status teks mikrofon jika aktif/gagal */}
             {micStatusText && (
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-xs sm:text-sm text-gray-600 bg-white/80 px-4 py-2 rounded-lg shadow-sm border border-gray-100 max-w-sm"
+                className="w-full flex flex-col items-center gap-2"
               >
-                {micStatusText}
-              </motion.p>
+                <p className="text-xs sm:text-sm text-gray-600 bg-white/80 px-4 py-2 rounded-lg shadow-sm border border-gray-100 max-w-sm">
+                  {micStatusText}
+                </p>
+
+                {/* Meter Indikator Kekuatan Tiupan (Visual Feedback) */}
+                {isMicActive && (
+                  <div className="w-full max-w-xs bg-gray-200/80 rounded-full h-3 overflow-hidden border border-gray-300 p-0.5 shadow-inner">
+                    <div
+                      className="bg-gradient-to-r from-teal-400 via-rose-400 to-romantic-accent h-full rounded-full transition-all duration-75"
+                      style={{ width: `${micVolume}%` }}
+                    />
+                  </div>
+                )}
+              </motion.div>
             )}
           </div>
         ) : (

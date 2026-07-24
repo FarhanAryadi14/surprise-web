@@ -74,6 +74,14 @@ export interface ContentConfig {
     reblowButtonText: string;
     backToTopButtonText: string;
   };
+  scratchCardSection: {
+    title: string;
+    subtitle: string;
+    scratchInstruction: string;
+    revealedTitle: string;
+    revealedMessage: string;
+    actionText: string;
+  };
 }
 
 export const content: ContentConfig = {
@@ -239,5 +247,17 @@ export const content: ContentConfig = {
     message: "Aku mencintaimu hari ini, esok, dan sampai hembusan nafas terakhirku.",
     reblowButtonText: "🎂 Tiup Lilin Lagi",
     backToTopButtonText: "⬆️ Kembali ke Atas",
+  },
+
+  // --------------------------------------------------------------------------
+  // 10. SCRATCH CARD SECTION (KARTU GOSOK HADIAH RAHASIA)
+  // --------------------------------------------------------------------------
+  scratchCardSection: {
+    title: "Kartu Hadiah Rahasia 🎁",
+    subtitle: "Ada satu hadiah spesial tambahan yang sudah kusiapkan khusus untuk kamu sayang!",
+    scratchInstruction: "✨ Gosok di sini pakai jarimu ✨",
+    revealedTitle: "Selamat Sayangku! 🎉",
+    revealedMessage: "Kamu mendapatkan 1 Buket Bunga Cantik & Pelukan Paling Hangat dari aku hari ini! 💐🤗",
+    actionText: "💐 Bunga untuk kamu 💐",
   }
 };
